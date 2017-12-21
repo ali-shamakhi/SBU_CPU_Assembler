@@ -1,0 +1,12 @@
+public interface CONFIG {
+    String BEGIN_BIN_TEXT = "memory_initialization_radix=2;\n" +
+            "memory_initialization_vector=\n";
+    String END_BIN_TEXT = ";\n";
+    String MID_INSTR_TEXT = ",\n";
+    String BIN_FILE_EXTENSION = ".coe";
+    String ASM_COMMENT_STARTER = ";";
+    String ASM_LABEL_DEFINER = ":";
+    String ASM_OPERAND_SPLITTER = ",";
+    int DEFAULT_BIN_FILE_SIZE_WORDS = 256;
+    int MAX_ALLOWED_ERRORS = 100;
+}
