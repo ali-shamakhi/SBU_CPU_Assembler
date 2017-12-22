@@ -44,24 +44,21 @@ public class Assembler {
             System.out.println("Assembling " + inFilePath + " into " + outFilePath + " ...");
             while ((strLine = r.readLine()) != null) {
                 if (strLine.trim().startsWith(CONFIG.ASM_COMMENT_STARTER)) continue;
-                String label;
-                String asmLine;
-                if (strLine.contains(CONFIG.ASM_LABEL_DEFINER)) {
-                    int indexLD = strLine.indexOf(CONFIG.ASM_LABEL_DEFINER);
-                    label = strLine.substring(0, indexLD);
-                    asmLine = strLine.substring(indexLD + 1).trim();
-                } else {
-                    label = null;
-                    asmLine = strLine.trim();
-                }
-                if (label != null) {
+                String asmLine = strLine.trim();
+                // define labels
+                while (asmLine.contains(CONFIG.ASM_LABEL_DEFINER)) {
+                    int indexLD = asmLine.indexOf(CONFIG.ASM_LABEL_DEFINER);
+                    String label = asmLine.substring(0, indexLD);
                     try {
                         Instruction.defineLabel(label, nextInstrAddr);
                     } catch (IllegalArgumentException iae) {
                         ErrorHandler.putLineError(r.getLineNumber(), strLine, iae.getMessage());
                     }
-                    if (asmLine.trim().equals("")) continue;
+                    asmLine = asmLine.substring(indexLD + 1).trim();
                 }
+                // check if no instruction in the line
+                if (asmLine.equals("")) continue;
+                // take the new instruction
                 String[] instrParts =
                         asmLine
                         .replaceAll(CONFIG.ASM_OPERAND_SPLITTER, " ")
