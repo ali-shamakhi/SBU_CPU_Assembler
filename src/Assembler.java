@@ -44,7 +44,7 @@ public class Assembler {
             System.out.println("Assembling " + inFilePath + " into " + outFilePath + " ...");
             while ((strLine = r.readLine()) != null) {
                 if (strLine.trim().startsWith(CONFIG.ASM_COMMENT_STARTER)) continue;
-                String asmLine = strLine.trim();
+                String asmLine = (strLine.contains(CONFIG.ASM_COMMENT_STARTER) ? strLine.substring(0, strLine.indexOf(CONFIG.ASM_COMMENT_STARTER)).trim() : strLine.trim());
                 // define labels
                 while (asmLine.contains(CONFIG.ASM_LABEL_DEFINER)) {
                     int indexLD = asmLine.indexOf(CONFIG.ASM_LABEL_DEFINER);
