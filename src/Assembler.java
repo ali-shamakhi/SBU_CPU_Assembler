@@ -5,6 +5,7 @@ public class Assembler {
 
     static FileReader in;
     static FileWriter out;
+    static FileWriter outList;
 
     static ArrayList<Instruction> instructionList;
     static int nextInstrAddr = 0;
@@ -29,6 +30,7 @@ public class Assembler {
             outFilePath = args[1];
         try {
             out = new FileWriter(outFilePath, false);
+            outList = new FileWriter(outFilePath + ".list", false);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error creating/opening " + inFilePath);
@@ -40,9 +42,11 @@ public class Assembler {
 
         LineNumberReader r = new LineNumberReader(in);
         String strLine;
+        StringBuilder fullLineSB = new StringBuilder();
         try {
             System.out.println("Assembling " + inFilePath + " into " + outFilePath + " ...");
             while ((strLine = r.readLine()) != null) {
+                fullLineSB.append(strLine).append("\n");
                 if (strLine.trim().startsWith(CONFIG.ASM_COMMENT_STARTER)) continue;
                 String asmLine = (strLine.contains(CONFIG.ASM_COMMENT_STARTER) ? strLine.substring(0, strLine.indexOf(CONFIG.ASM_COMMENT_STARTER)).trim() : strLine.trim());
                 // define labels
@@ -65,7 +69,8 @@ public class Assembler {
                         .split(" +", 2);
                 String operation = instrParts[0];
                 String[] operands = (instrParts.length > 1 ? instrParts[1].split(" +") : null);
-                instructionList.add(nextInstrAddr++, new Instruction(r.getLineNumber(), strLine, operation, operands));
+                instructionList.add(nextInstrAddr++, new Instruction(r.getLineNumber(), fullLineSB.toString(), strLine, operation, operands));
+                fullLineSB.delete(0, fullLineSB.length());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,7 +89,7 @@ public class Assembler {
             ErrorHandler.printErrors();
             System.err.println("Failed. " + ErrorHandler.getNumErrors() + " error(s) found.");
         } else {
-            Instruction INSTR_NOP = new Instruction(-1, "NOP", Instruction.OPR_NOP, null);
+            Instruction INSTR_NOP = new Instruction(-1, "", "", Instruction.OPR_NOP, null);
             while (instructionList.size() < CONFIG.DEFAULT_BIN_FILE_SIZE_WORDS) {
                 instructionList.add(INSTR_NOP);
             }
@@ -94,6 +99,7 @@ public class Assembler {
                 System.err.println("Failed. " + ErrorHandler.getNumErrors() + " error(s) found.");
             } else {
                 try {
+                    writeToLISTFile(outList, instructionList);
                     writeToBINFile(out, instructionList);
                     System.out.println("Succeed.");
                 } catch (IOException e) {
@@ -105,6 +111,7 @@ public class Assembler {
 
         try {
             out.close();
+            outList.close();
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error closing " + inFilePath);
@@ -120,5 +127,15 @@ public class Assembler {
             out.write(instructions.get(instrAddr++).getBinaryIntruction() + CONFIG.MID_INSTR_TEXT);
         }
         out.write(instructions.get(instructions.size() - 1).getBinaryIntruction() + CONFIG.END_BIN_TEXT);
+    }
+
+    private static void writeToLISTFile(FileWriter outList, List<Instruction> instructions) throws IOException {
+        if (instructions == null || instructions.size() == 0) return;
+        int instrAddr = 0;
+        for (Instruction instr : instructions) {
+            if (!instr.getFullLine().equals("")) {
+                outList.write("================\n" + " | " + instr.getFullLine().replace("\n", "\n" + " | ")  + "\n" + instr.getBinaryIntruction() + "\n================\n");
+            }
+        }
     }
 }

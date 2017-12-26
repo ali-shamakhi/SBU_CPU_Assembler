@@ -124,6 +124,7 @@ public class Instruction {
 
     // Instruction fields
     private int lineNumber;
+    private String fullLine;
     private String strLine;
     private String operation;
 
@@ -131,12 +132,17 @@ public class Instruction {
 
     private String binaryIntruction;
 
-    public Instruction(int lineNumber, @NotNull String strLine, @NotNull String operation, @Nullable String[] operands) {
+    public Instruction(int lineNumber, @NotNull String fullLine, @NotNull String strLine, @NotNull String operation, @Nullable String[] operands) {
         this.lineNumber = lineNumber;
+        this.fullLine = fullLine;
         this.strLine = strLine;
         this.operation = operation;
         this.operands = (operands != null && operands.length > 0 ? operands : null);
         this.validate();
+    }
+
+    public String getFullLine() {
+        return fullLine;
     }
 
     public String getBinaryIntruction() {

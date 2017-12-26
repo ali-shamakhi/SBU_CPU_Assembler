@@ -54,3 +54,4 @@ fabric.properties
 src/CONFIG.java
 *.asm
 *.coe
+*.list
