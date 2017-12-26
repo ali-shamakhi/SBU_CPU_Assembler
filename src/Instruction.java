@@ -24,7 +24,7 @@ public class Instruction {
     public static final String OPR_ROR          = "ROR";             public static final String BIN_ROR = "0000001110";
     public static final String OPR_INC          = "INC";             public static final String BIN_INC = "0000001111";
     public static final String OPR_DEC          = "DEC";             public static final String BIN_DEC = "0000010000";
-    public static final String OPR_NOP          = "NOP";             public static final String BIN_NOP = "0000010001";
+    public static final String OPR_NOP          = "NOP";             public static final String BIN_NOP = "0000000000";
     public static final String OPR_ShowR        = "ShowR";         public static final String BIN_ShowR = "0000010010";
     public static final String OPR_ShowRR       = "ShowRR";       public static final String BIN_ShowRR = "0000010011";
     public static final String OPR_LoadDipR     = "LoadDipR";   public static final String BIN_LoadDipR = "0000010100";
