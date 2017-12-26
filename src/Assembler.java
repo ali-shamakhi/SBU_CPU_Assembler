@@ -84,7 +84,11 @@ public class Assembler {
             ErrorHandler.printErrors();
             System.err.println("Failed. " + ErrorHandler.getNumErrors() + " error(s) found.");
         } else {
-            Instruction.generateBinaries(instructionList);
+            Instruction INSTR_NOP = new Instruction(-1, "NOP", Instruction.OPR_NOP, null);
+            while (instructionList.size() < CONFIG.DEFAULT_BIN_FILE_SIZE_WORDS) {
+                instructionList.add(INSTR_NOP);
+            }
+            Instruction.generateBinaries(instructionList);  // completes bin generations
             if (ErrorHandler.getNumErrors() > 0) {
                 ErrorHandler.printErrors();
                 System.err.println("Failed. " + ErrorHandler.getNumErrors() + " error(s) found.");
