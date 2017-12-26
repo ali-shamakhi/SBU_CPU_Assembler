@@ -134,7 +134,7 @@ public class Assembler {
         int instrAddr = 0;
         for (Instruction instr : instructions) {
             if (!instr.getFullLine().equals("")) {
-                outList.write("================\n" + " | " + instr.getFullLine().replace("\n", "\n" + " | ")  + "\n" + instr.getBinaryIntruction() + "\n================\n");
+                outList.write("================\n" + " | " + instr.getFullLine().replace("\n", "\n" + " | ") + "[ ADDR: " + instrAddr++ + " ]" + "\n" + instr.getBinaryIntruction() + "\n================\n");
             }
         }
     }
