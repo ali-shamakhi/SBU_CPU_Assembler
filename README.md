@@ -8,7 +8,9 @@ Feel free to comment or make pull requests to improve! :wink:
 
 # Preparation
 
-Add `src\CONFIG.java` to the project. You can copy and modify `src\CONFIG.sample`.
+Create `src\CONFIG.java` file in the project. You can copy and modify `src\CONFIG.sample`.
+
+(Preferred to use JetBrains IntelliJ IDEA)
 
 # Usage
 
